@@ -1,0 +1,5 @@
+Day:1;Item:NailCutters
+Day:1;Item:Grains
+Day:2;Item:Wine
+Day:2;Item:EndangeredAnimals
+Day:2;Item:Plants
