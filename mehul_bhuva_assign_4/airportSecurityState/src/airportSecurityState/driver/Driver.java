@@ -1,5 +1,12 @@
 package airportSecurityState.driver;
 
+import airportSecurityState.util.Results;
+
+import java.io.IOException;
+
+import airportSecurityState.airportStates.AirportContext;
+import airportSecurityState.securityfactorcomputation.SecurityComputation;
+import airportSecurityState.util.FileDisplayInterface;
 import airportSecurityState.util.FileProcessor;
 import airportSecurityState.util.MyLogger;
 import airportSecurityState.util.MyLogger.DebugLevel;
@@ -14,7 +21,7 @@ public class Driver {
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		/*
 		 * As the build.xml specifies the arguments as argX, in case the argument value
@@ -57,7 +64,20 @@ public class Driver {
 					System.exit(0);
 				}
 				MyLogger.setDebugValue(debug_level);//it sets current debug level
+				
+				FileDisplayInterface ResultsObject = new Results();
+				SecurityComputation SecurityComputationObject = new SecurityComputation();
+				AirportContext airportobj = new AirportContext();
+				String line;
 
+   				while ((line = fp.readLine()) != null) {
+					SecurityComputationObject.setCurrentLine(line);
+					SecurityComputationObject.CalculateFactors();
+					SecurityComputationObject = airportobj.lineProcessing(SecurityComputationObject);
+					ResultsObject.storeresult(SecurityComputationObject.getResult());
+				}
+				
+				ResultsObject.writeFile(args[1]);
 
 			}
 
