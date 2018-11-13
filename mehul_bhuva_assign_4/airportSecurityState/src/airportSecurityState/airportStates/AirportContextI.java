@@ -1,5 +1,7 @@
 package airportSecurityState.airportStates;
 
-public interface AirportContextI {
+import airportSecurityState.securityfactorcomputation.SecurityComputation;
 
+public interface AirportContextI {
+	public SecurityComputation lineProcessing(SecurityComputation SecurityComputationObject);
 }

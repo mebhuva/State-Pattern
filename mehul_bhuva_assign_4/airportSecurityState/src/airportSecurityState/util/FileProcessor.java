@@ -18,7 +18,6 @@ public class FileProcessor {
 	private File input;
 	private BufferedReader Bfreader;
 
-	
 	/**
 	 * Default Constructor
 	 * 
@@ -26,16 +25,17 @@ public class FileProcessor {
 	public FileProcessor() {
 		MyLogger.writeMessage(this.getClass().getName() + " Default Constructor is called ", DebugLevel.CONSTRUCTOR);
 	}
+
 	/**
 	 * Constructor used to initialize input file object
 	 * 
 	 * @param args
 	 */
-	public FileProcessor(String[] args) {
+	public FileProcessor(String FileName) {
 
 		MyLogger.writeMessage(this.getClass().getName() + " Constructor is called ", DebugLevel.CONSTRUCTOR);
 		try {
-			this.input = new File(args[0]);
+			this.input = new File(FileName);
 			Bfreader = new BufferedReader(new FileReader(this.input));
 		} catch (IOException e) {
 			MyLogger.writeMessage(this.getClass().getName() + " : " + e.toString(), DebugLevel.EXCEPTION);
@@ -63,7 +63,7 @@ public class FileProcessor {
 	 * 
 	 * @return new line from input file.
 	 */
-	public synchronized String readLine() {
+	public String readLine() {
 		try {
 			String readLine = Bfreader.readLine();
 			return readLine;
@@ -89,34 +89,9 @@ public class FileProcessor {
 
 		}
 	}
+
 	@Override
 	public String toString() {
-		return "FileProcessor [input=" + input + ", Bfreader=" + Bfreader + ", fileInputExists()=" + fileInputExists()
-				+ ", readLine()=" + readLine() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
-				+ ", toString()=" + super.toString() + "]";
+		return "FileProcessor [input=" + input + ", Bfreader=" + Bfreader + "]";
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((input == null) ? 0 : input.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		FileProcessor other = (FileProcessor) obj;
-		if (input == null) {
-			if (other.input != null)
-				return false;
-		} else if (!input.equals(other.input))
-			return false;
-		return true;
-	}
-
 }

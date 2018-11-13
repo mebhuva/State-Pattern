@@ -5,6 +5,7 @@ import airportSecurityState.util.Results;
 import java.io.IOException;
 
 import airportSecurityState.airportStates.AirportContext;
+import airportSecurityState.airportStates.AirportContextI;
 import airportSecurityState.securityfactorcomputation.SecurityComputation;
 import airportSecurityState.util.FileDisplayInterface;
 import airportSecurityState.util.FileProcessor;
@@ -33,11 +34,10 @@ public class Driver {
 			System.err.println("Invalid arguments specified");
 			System.err.println(
 					"Command : ant -buildfile build.xml run -Darg0=input.txt -Darg1=output.txt -Darg2=DEBUG_LEVEL");
-			System.err.println(
-					"DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION");
+			System.err.println("DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION");
 			System.exit(0);
 		} else {
-			FileProcessor fp = new FileProcessor(args);// creating fileprocessor object
+			FileProcessor fp = new FileProcessor(args[0]);// creating fileprocessor object
 			int checkinsert = fp.fileInputExists();// checking if input file exists or not in the directory
 			if (checkinsert == 0) {
 				System.err.println("Input File not found");
@@ -45,8 +45,7 @@ public class Driver {
 			}
 			if (!isInteger(args[2])) {
 				System.err.println("Debug Value shuld be a number");
-				System.err.println(
-						"DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION");
+				System.err.println("DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION");
 				System.exit(0);
 			} else {
 				int debug_level = 0;
@@ -59,33 +58,49 @@ public class Driver {
 				}
 				if (debug_level < 0 || debug_level > 4) {
 					System.err.println("Debug level should be between 0 and 4");
-					System.err.println(
-							"DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION");
+					System.err.println("DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION");
 					System.exit(0);
 				}
-				MyLogger.setDebugValue(debug_level);//it sets current debug level
-				
+				MyLogger.setDebugValue(debug_level);// it sets current debug level
+
 				FileDisplayInterface ResultsObject = new Results();
 				SecurityComputation SecurityComputationObject = new SecurityComputation();
-				AirportContext airportobj = new AirportContext();
+				AirportContextI airportobj = new AirportContext();
 				String line;
 
-   				while ((line = fp.readLine()) != null) {
+				while ((line = fp.readLine()) != null) {
 					SecurityComputationObject.setCurrentLine(line);
 					SecurityComputationObject.CalculateFactors();
 					SecurityComputationObject = airportobj.lineProcessing(SecurityComputationObject);
 					ResultsObject.storeresult(SecurityComputationObject.getResult());
 				}
-				
-				ResultsObject.writeFile(args[1]);
+				FileProcessor fp1 = new FileProcessor(args[1]);// creating fileprocessor object
+				int checkoutput = fp.fileInputExists();// checking if output file exists or not in the directory
+				if (checkoutput == 0) {
+					MyLogger.writeMessage("Creating output file and Writing into the file", DebugLevel.RESULT);
+					MyLogger.WriteResult(ResultsObject, args[1]);
+				} else {
+					if (fp1.readLine() == null) {
+						MyLogger.writeMessage("File is empty", DebugLevel.RESULT);
+						MyLogger.writeMessage("Creating output file and Writing into the file", DebugLevel.RESULT);
+						MyLogger.WriteResult(ResultsObject, args[1]);
+					} else {
+						System.err.println("output file is not empty");
+						MyLogger.writeMessage("File is not empty", DebugLevel.EXCEPTION);
+						System.exit(0);
+
+					}
+				}
 
 			}
 
 		}
-		
+
 	}
+
 	/**
 	 * isInteger check if string is integer or not
+	 * 
 	 * @param str
 	 * @return
 	 */
@@ -95,9 +110,15 @@ public class Driver {
 			return true;
 		} catch (NumberFormatException er) {
 			return false;
-		}finally {
+		} finally {
 
 		}
-		
+
+	}
+
+	@Override
+	public String toString() {
+		return "Driver [getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
+				+ "]";
 	}
 }
