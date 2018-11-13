@@ -34,7 +34,7 @@ public class Driver {
 			System.err.println("Invalid arguments specified");
 			System.err.println(
 					"Command : ant -buildfile build.xml run -Darg0=input.txt -Darg1=output.txt -Darg2=DEBUG_LEVEL");
-			System.err.println("DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION");
+			System.err.println("DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION , 3 - STATECHANGE, 4 -  RESULT");
 			System.exit(0);
 		} else {
 			FileProcessor fp = new FileProcessor(args[0]);// creating fileprocessor object
@@ -45,7 +45,7 @@ public class Driver {
 			}
 			if (!isInteger(args[2])) {
 				System.err.println("Debug Value shuld be a number");
-				System.err.println("DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION");
+				System.err.println("DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION , 3 - STATECHANGE, 4 -  RESULT");
 				System.exit(0);
 			} else {
 				int debug_level = 0;
@@ -56,9 +56,9 @@ public class Driver {
 				} finally {
 
 				}
-				if (debug_level < 0 || debug_level > 4) {
+				if (debug_level > 0 && debug_level < 4) {
 					System.err.println("Debug level should be between 0 and 4");
-					System.err.println("DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION");
+					System.err.println("DEBUG_LEVEL : 0 - None, 1 - CONSTRUCTOR , 2 - EXCEPTION , 3 - STATECHANGE, 4 -  RESULT");
 					System.exit(0);
 				}
 				MyLogger.setDebugValue(debug_level);// it sets current debug level
